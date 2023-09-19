@@ -1,11 +1,8 @@
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
-import { useSplash } from '../hooks/useSplash';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Chat } from '../Screens/Chat';
 import { Home, IAlert } from '../Screens/Home';
 import { Splash } from '../Screens/Splash';
+import { useSplash } from '../hooks/useSplash';
 
 type StackRoutes = {
   Home: undefined;
