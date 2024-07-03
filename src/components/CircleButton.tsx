@@ -1,6 +1,5 @@
-import { Component } from 'react';
-import { HStack, Icon, IconButton, Stagger } from 'native-base';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { HStack, Icon, IconButton, Stagger } from "native-base";
 
 interface CircleButtonProps {
   isOpen: boolean;
@@ -29,7 +28,7 @@ export function CircleButton({
           scale: 1,
           opacity: 1,
           transition: {
-            type: 'spring',
+            type: "spring",
             mass: 0.8,
             stagger: {
               offset: 30,
@@ -88,7 +87,7 @@ export function CircleButton({
           onPress={onToggle}
           bg="violet.500"
           _pressed={{
-            bg: 'violet.800',
+            bg: "violet.800",
           }}
           icon={
             <Icon
@@ -97,7 +96,7 @@ export function CircleButton({
               name="dots-horizontal"
               color="warmGray.50"
               _dark={{
-                color: 'warmGray.50',
+                color: "warmGray.50",
               }}
             />
           }

@@ -1,9 +1,9 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import { NativeBaseProvider } from 'native-base';
-import { SplashContextProvider } from './src/hooks/useSplash';
-import { Routes } from './src/routes/index.routes';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { NativeBaseProvider } from "native-base";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SplashContextProvider } from "./src/hooks/useSplash";
+import { Routes } from "./src/routes/index.routes";
 
 export default function App() {
   return (
@@ -11,11 +11,7 @@ export default function App() {
       <NativeBaseProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <SplashContextProvider>
-            <StatusBar
-              style="light"
-              backgroundColor="transparent"
-              translucent
-            />
+            <StatusBar style="dark" backgroundColor="transparent" translucent />
             <Routes />
           </SplashContextProvider>
         </GestureHandlerRootView>

@@ -1,4 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
+import { Feather } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import {
   Box,
   Center,
@@ -10,57 +12,66 @@ import {
   Pressable,
   Text,
   VStack,
-} from 'native-base';
-import { FlatList, Platform } from 'react-native';
-import { IAlert } from './Home';
-import { Feather } from '@expo/vector-icons';
-import { useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+} from "native-base";
+import { useState } from "react";
+import { FlatList, Platform } from "react-native";
+import { IAlert } from "./Home";
 
-const messages = [
-  {
-    id: 1,
-    message: 'Passei pelo Local, está complicado',
-  },
-  {
-    id: 2,
-    message: 'Alguém ferido ?',
-  },
-  {
-    id: 3,
-    message: 'Alguma noticia se o problema já foi resolvido ?',
-  },
-];
+type MessageProps = {
+  id: number;
+  message: string | undefined;
+};
 
-interface ChatPRops {
-  data: IAlert;
+interface ChatProps {
+  data: IAlert; // Assuming IAlert is defined elsewhere
 }
 
 export function Chat() {
-  const { params } = useRoute() as { params: ChatPRops };
+  const { params } = useRoute() as { params: ChatProps };
 
-  const [message, setMessage] = useState('');
-  //TODO: Pegar as mensagens da api
+  // Define the state for messages with the correct initial value and type
+  const [messages, setMessages] = useState<MessageProps[]>([
+    {
+      id: 1,
+      message: "Passei pelo Local, está complicado",
+    },
+    {
+      id: 2,
+      message: "Alguém ferido ?",
+    },
+    {
+      id: 3,
+      message: "Alguma noticia se o problema já foi resolvido ?",
+    },
+  ]);
 
+  const [message, setMessage] = useState<string | undefined>();
   function handleSendMessage() {
-    console.log('enviar mensagem');
-    console.log(message);
-    resetMessage();
+    if (message) {
+      // Ensure message is not undefined before proceeding
+      const newMessage: MessageProps = {
+        id: messages.length + 1,
+        message: message,
+      };
+      setMessages([...messages, newMessage]);
+      resetMessage();
+    }
   }
 
   function resetMessage() {
-    setMessage('');
+    setMessage("");
   }
+
   return (
     <>
       <StatusBar style="dark" backgroundColor="transparent" translucent />
       <KeyboardAvoidingView
         flex="1"
         h={{
-          base: '400px',
-          lg: 'auto',
+          base: "400px",
+          lg: "auto",
         }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <VStack
           safeArea
@@ -78,7 +89,7 @@ export function Chat() {
               renderItem={({ item, index }) => (
                 <ChatCard text={item?.message} index={index} />
               )}
-              keyExtractor={item => String(item.id)}
+              keyExtractor={(item) => String(item.id)}
               ItemSeparatorComponent={() => <Box h="4" />}
             />
 
@@ -98,9 +109,9 @@ export function Chat() {
                 color="white"
                 flex="1"
                 _focus={{
-                  borderColor: 'violet.700',
-                  bg: 'trueGray.800',
-                  selectionColor: 'violet.700',
+                  borderColor: "violet.700",
+                  bg: "trueGray.800",
+                  selectionColor: "violet.700",
                 }}
               />
               <Pressable onPress={handleSendMessage}>
@@ -115,14 +126,14 @@ export function Chat() {
 }
 
 interface ChatCardProps {
-  text: string;
+  text: string | undefined;
   index: number;
 }
 function ChatCard({ text, index }: ChatCardProps) {
   return (
     <Box
       w="80%"
-      bg={index % 2 === 0 ? 'violet.900' : 'darkBlue.900'}
+      bg={index % 2 === 0 ? "violet.900" : "darkBlue.900"}
       h="16"
       justifyContent="center"
       p="4"

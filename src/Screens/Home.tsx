@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Alert, Platform } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import * as Location from 'expo-location';
-import { Box, Center, Spinner, useDisclose, VStack } from 'native-base';
-import { mapStyles } from '../styles/maps';
-import { api } from '../services/api';
-import { socket } from '../services/io';
-import { getIcon } from '../utils/getIcon';
-import { ModalPrimitive } from '../components/ModalPrimitive';
-import { ActionsheetPrimitive } from '../components/ActionsheetPrimitive';
-import { Card } from '../components/Card';
-import { useNavigation } from '@react-navigation/native';
-import { CircleButton } from '../components/CircleButton';
+import { useNavigation } from "@react-navigation/native";
+import * as Location from "expo-location";
+import { Box, Center, Spinner, VStack, useDisclose } from "native-base";
+import { useEffect, useState } from "react";
+import { Alert, Platform } from "react-native";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import { ActionsheetPrimitive } from "../components/ActionsheetPrimitive";
+import { Card } from "../components/Card";
+import { CircleButton } from "../components/CircleButton";
+import { ModalPrimitive } from "../components/ModalPrimitive";
+import { api } from "../services/api";
+import { socket } from "../services/io";
+import { mapStyles } from "../styles/maps";
+import { getIcon } from "../utils/getIcon";
 
 export interface IAlert {
   id: string;
@@ -26,8 +26,8 @@ export interface IAlert {
 export function Home() {
   const [isValid, setIsValid] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [markers, setMarkers] = useState<IAlert[]>([]);
   const { isOpen, onToggle } = useDisclose();
   const navigation = useNavigation();
@@ -55,8 +55,8 @@ export function Home() {
     (async () => {
       setLoading(true);
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission to access location was denied');
+      if (status !== "granted") {
+        Alert.alert("Permission to access location was denied");
         return;
       }
 
@@ -67,13 +67,13 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    console.log('socket io');
-    socket.on('connection', () => {
-      console.log('connected');
+    console.log("socket io");
+    socket.on("connection", () => {
+      console.log("connected");
     });
 
-    socket.on('newAlert', data => {
-      console.log('new alert', data);
+    socket.on("newAlert", (data) => {
+      console.log("new alert", data);
       if (data) {
         setMarkers(data);
       }
@@ -85,11 +85,12 @@ export function Home() {
   }
 
   function handleOpenSubtitle() {
+    console.log("Abrindo subtitle");
     onOpenSubtitle();
   }
 
   async function handleAddAlert() {
-    console.log('Enviando alerta');
+    console.log("Enviando alerta");
     if (!verifyFields()) {
       return;
     }
@@ -101,14 +102,14 @@ export function Home() {
       });
       const { latitude, longitude } = location.coords;
 
-      await api.post('/alerts', {
+      await api.post("/alerts", {
         category,
         description,
         lat: latitude,
         long: longitude,
       });
 
-      socket.emit('newAlert', {
+      socket.emit("newAlert", {
         category,
         description,
         lat: latitude,
@@ -124,7 +125,7 @@ export function Home() {
   }
 
   function verifyFields() {
-    if (category !== '' && description !== '') {
+    if (category !== "" && description !== "") {
       setIsValid(true);
       return true;
     } else {
@@ -134,12 +135,12 @@ export function Home() {
   }
 
   function resetFields() {
-    setCategory('');
-    setDescription('');
+    setCategory("");
+    setDescription("");
   }
 
   function handleOpenInfo(info: IAlert) {
-    console.log('info', info);
+    console.log("info", info);
     onOpenInfo();
     setCurrentInfo(info);
   }
@@ -152,7 +153,7 @@ export function Home() {
         status: false,
       });
 
-      socket.emit('newAlert', {});
+      socket.emit("newAlert", {});
       onCloseInfo();
     } catch (error) {
     } finally {
@@ -161,24 +162,24 @@ export function Home() {
   }
 
   function handleNavigateToChat(data: IAlert) {
-    console.log('data', data);
+    console.log("data", data);
     onCloseInfo();
-    navigation.navigate('Chat', { data });
+    navigation.navigate("Chat", { data });
   }
 
   return (
     <VStack
       flex="1"
       bg="trueGray.900"
-      safeArea={Platform.OS === 'android' ? true : undefined}
+      safeArea={Platform.OS === "android" ? true : undefined}
     >
       {location?.coords?.latitude ? (
         <MapView
           showsUserLocation={true}
           zoomControlEnabled={true}
-          provider={PROVIDER_GOOGLE}
+          provider={PROVIDER_DEFAULT}
           customMapStyle={mapStyles}
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: "100%", width: "100%" }}
           showsMyLocationButton
           initialRegion={{
             latitude: location?.coords?.latitude || 0,
@@ -187,7 +188,7 @@ export function Home() {
             longitudeDelta: 0.0421,
           }}
         >
-          {markers?.map(marker => {
+          {markers?.map((marker) => {
             if (marker.status === true) {
               return (
                 <Marker
@@ -210,7 +211,7 @@ export function Home() {
         </Center>
       )}
 
-      <Box position="absolute" right="3.5" bottom="120px" zIndex="999">
+      <Box position="absolute" right="3.5" bottom="50px" zIndex="999">
         <CircleButton
           isOpen={isOpen}
           onToggle={onToggle}
